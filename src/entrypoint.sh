@@ -5,8 +5,12 @@ set -x
 # shellcheck source=src/sync_common.sh
 source sync_common.sh
 
-if [[ -z "${GITHUB_TOKEN}" ]]; then
-    err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
+if [[ -z "${GITHUB_TOKEN_LOCAL}" ]]; then
+    err "Missing input 'github_token_local: \${{ secrets.GITHUB_TOKEN_LOCAL }}'.";
+    exit 1;
+fi
+if [[ -z "${GITHUB_TOKEN_REMOTE}" ]]; then
+    err "Missing input 'github_token_remote: \${{ secrets.GITHUB_TOKEN_REMOTE }}'.";
     exit 1;
 fi
 
@@ -44,7 +48,7 @@ function ssh_setup() {
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup
 elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN_REMOTE}"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"

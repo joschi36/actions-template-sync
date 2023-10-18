@@ -5,7 +5,10 @@ branding:
   icon: cloud
   color: green
 inputs:
-  github_token:
+  github_token_remote:
+    description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
+    required: true
+  github_token_local:
     description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: true
   source_repo_path:
@@ -49,7 +52,8 @@ runs:
   using: "docker"
   image: "src/Dockerfile"
   env:
-    GITHUB_TOKEN: ${{ inputs.github_token }}
+    GITHUB_TOKEN_REMOTE: ${{ inputs.github_token_remote }}
+    GITHUB_TOKEN_LOCAL: ${{ inputs.github_token_local }}
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
     UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
     SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}

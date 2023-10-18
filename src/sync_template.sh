@@ -125,6 +125,9 @@ push_and_create_pr () {
 
     echo "::group::push changes and create PR"
     debug "push changes"
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN_LOCAL}"
+    gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
+    gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
     git push --set-upstream origin "${NEW_BRANCH}"
 
     cmd_from_yml_file "prepr"
